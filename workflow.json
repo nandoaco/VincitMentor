@@ -1,0 +1,281 @@
+{
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "d5e465a6-b34d-495e-9b4e-5666dd8a52ff",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "nandoaco@gmail.com",
+          "mode": "id"
+        },
+        "additionalFields": {
+          "summary": "={{ $json.topico }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1120,
+        0
+      ],
+      "id": "5615f22b-e587-4245-b2c5-a24d9320be31",
+      "name": "Create an event",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "z7HxJr6aGf86VjwI",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "dataSourceId": {
+          "__rl": true,
+          "value": "3ba3ab39-7823-801b-b8be-000b262aba97",
+          "mode": "list",
+          "cachedResultName": "AI Engineering Lab",
+          "cachedResultUrl": "https://app.notion.com/p/3ba3ab397823808cb44deb633b97df79"
+        },
+        "title": "={{ $('Code in JavaScript1').item.json.topico }}",
+        "propertiesUi": {
+          "propertyValues": [
+            {
+              "key": "=Data|date",
+              "date": "={{ $json.start.dateTime }}",
+              "timezone": "Brazil/East"
+            },
+            {
+              "key": "Area|title",
+              "title": "={{ $('Code in JavaScript1').item.json.materia }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 3,
+      "position": [
+        1344,
+        0
+      ],
+      "id": "b0460822-10c0-4d51-83db-1db2c7c03aaa",
+      "name": "Create a database page",
+      "credentials": {
+        "notionApi": {
+          "id": "x3RFxsiv4WvnzZY7",
+          "name": "Notion account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "5530490542",
+        "text": "= {{ $json.topico }} ({{ $json.materia }})\\n\\n{{ $json.descricao }}\\n\\n💡 {{ $json.melhorias }}\\n🔗 {{ $json.link_pesquisa }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1568,
+        0
+      ],
+      "id": "70acab2a-d373-4b62-a574-468d7f7642eb",
+      "name": "Send a text message",
+      "webhookId": "0a6f57aa-d259-4f5e-a684-729f29fd4c2a",
+      "credentials": {
+        "telegramApi": {
+          "id": "vJFfgzOn3huYQM9j",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.anthropic.com/v1/messages",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "anthropic-version",
+              "value": "2023-06-01"
+            },
+            {
+              "name": "content-type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\": \"claude-haiku-4-5-20251001\",\n  \"max_tokens\": 400,\n  \"system\": \"Você é um mentor técnico de Blue Team, Cloud Security e automação. O roadmap tem estas áreas: n8n/Automação, Cloud, Cyber Security, Python, APIs, Agentes. Com base no progresso do aluno, escolha a área mais lógica pra próxima sessão, priorizando áreas 'Em andamento'. Responda APENAS com JSON válido, sem texto antes ou depois: {\\\"materia\\\": \\\"...\\\", \\\"topico\\\": \\\"...\\\", \\\"descricao\\\": \\\"...\\\", \\\"melhorias\\\": \\\"...\\\", \\\"link_pesquisa\\\": \\\"...\\\"}\",\n  \"messages\": [\n    {\n      \"role\": \"user\",\n      \"content\": \"Progresso atual: {{ $json.resumo_progresso }}. Gere a próxima aula.\"\n    }\n  ]\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        672,
+        0
+      ],
+      "id": "00b4ab07-c75d-44cc-a850-4ea4c61b7ca7",
+      "name": "HTTP Request",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "V2yopsrMbLAzCG0u",
+          "name": "Header Auth account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "databasePage",
+        "operation": "getAll",
+        "dataSourceId": {
+          "__rl": true,
+          "value": "3ba3ab39-7823-801b-b8be-000b262aba97",
+          "mode": "list",
+          "cachedResultName": "AI Engineering Lab",
+          "cachedResultUrl": "https://app.notion.com/p/3ba3ab397823808cb44deb633b97df79"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.notion",
+      "typeVersion": 3,
+      "position": [
+        224,
+        0
+      ],
+      "id": "91862db1-f5a0-40c0-b922-860ef1af0d9d",
+      "name": "Get many database pages",
+      "credentials": {
+        "notionApi": {
+          "id": "x3RFxsiv4WvnzZY7",
+          "name": "Notion account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const items = $input.all();\nconst resumo = items.map(i => {\n  const j = i.json;\n  const area = j.property_área || j.property_area || j.name || 'Área';\n  const status = j.property_status || 'Status';\n  return `${area}: ${status}`;\n}).join('; ');\n\nreturn [{ json: { resumo_progresso: resumo } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        448,
+        0
+      ],
+      "id": "25323e4c-1302-42b8-8dc0-c70e3de0b55e",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $json.content[0].text;\nconst cleaned = raw.replace(/```json|```/g, '').trim();\nconst parsed = JSON.parse(cleaned);\nreturn [{ json: parsed }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        896,
+        0
+      ],
+      "id": "c59edd84-a13a-452e-a838-e6c1b16c4a38",
+      "name": "Code in JavaScript1"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get many database pages",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create an event": {
+      "main": [
+        [
+          {
+            "node": "Create a database page",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a database page": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get many database pages": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Create an event",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "70aacf2c7293d58de263d9c35d126e0e557199b18f4635ecd960f35571f836f8"
+  }
+}

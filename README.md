@@ -1,4 +1,4 @@
-# AI Mentor — Sistema de Automação de Estudos
+# VincitMentor — Sistema de Automação de Estudos
 
 Sistema de automação construído em n8n que agenda sessões de estudo, registra o progresso em uma base de conhecimento e envia lembretes automáticos — projetado como base de portfólio para vagas de Cyber Security, Cloud e AI Engineering.
 

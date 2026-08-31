@@ -152,7 +152,7 @@ Controles aplicados:
 - [x] Pipeline de geração de aula ponta a ponta (IA → banco → frontend)
 - [x] Aulas com evidência técnica real (log bruto) e exercício aplicado
 - [x] Captura da resposta do aluno via webhook
-- [ ] Avaliação automatizada da resposta com rubrica e feedback estruturado
+- [x] Avaliação automatizada da resposta com rubrica e feedback estruturado
 - [ ] Mapa de conhecimento e definição da próxima atividade por lacuna
 - [ ] RAG com pgvector sobre documentação técnica própria
 - [ ] Autenticação, RLS e suporte a múltiplos usuários

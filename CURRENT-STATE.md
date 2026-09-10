@@ -4,23 +4,20 @@
 
 Fase atual: TRANSIÇÃO FASE 2 (LOOP DE AVALIAÇÃO CONCLUÍDO) → FASE 3 (GAPS & LEARNING ENGINE)
 
-FUNCIONANDO:
-- Pipeline de Geração (Fase 1): Gemini flash-lite → Code JS1 → Supabase (lessons) → Google Sheets (espelho) → Softr.
-- Exibição de cenários SOC L1, logs brutos formatados (Windows Event Logs 4624/4625), desafios e filtros na interface Softr.
-- Formulário customizado em HTML/JS no Lesson Detail extraindo recordId via query string de URL.
-- Disparo de telemetria via HTTP POST para o Webhook (/avaliar-resposta) no n8n.
-- Orquestração de ponta a ponta no n8n:
-  - Supabase (Get a row): Recupera a aula correspondente usando recordId.
-  - Google Gemini (Message a model): Avaliador analítico utilizando a Rubrica Dimensional V1.0.
-  - Code (Normalize Evaluation): Parser robusto do JSON gerado pela IA com fallbacks de segurança.
-  - Supabase (Create a row): Gravação completa do histórico em student_answers, incluindo o payload estruturado em evaluation_json (JSONB).
-  - Supabase (Update a row): Atualização de status da aula para completed e prefixo ✅ [Concluído] no título.
-  - Google Sheets (Update row in sheet): Atualização do espelho no Sheets sem duplicidade de linhas.
-  - Respond to Webhook: Retorno formatado via HTTP para a interface.
-- Frontend Softr renderizando em tempo real a pontuação (0-100), o veredito dimensional (ex: APROVADO COM RESSALVAS) e o parecer técnico do mentor.
+STATUS ATUAL:
+- Pipeline de Geração (Fase 1) homologado: Gemini Flash-Lite → Parser JS → Supabase (lessons) → Espelho Sheets.
+- Loop de Avaliação (Fase 2) validado em produção:
+  - Submissão via formulário disparando Webhook POST (/avaliar-resposta) no n8n.
+  - Avaliador Gemini operando sob a Rubrica Dimensional V1.0 (Acurácia, Raciocínio, Contenção e Limite).
+  - Parser JavaScript no n8n normalizando payload e tratando fallbacks.
+  - Gravação do histórico relacional em `student_answers` com metadados em `evaluation_json` (JSONB).
+  - Tabela `knowledge_states` criada com chave única composta (student_email, competency_id).
+- Frontend Moderno:
+  - Transição do frontend legado para SPA React + Vite + Tailwind CSS.
+  - Build e deploy automatizados via Vercel em produção.
 
 ÚLTIMO MARCO HOMOLOGADO:
-Loop completo de avaliação e feedback (Fase 2) validado em produção com nota 82/100, persistência relacional e atualização automática de status no banco.
+Avaliação dimensional funcional de ponta a ponta com retorno de nota (82/100), parecer tático detalhado e deploy da nova interface React na nuvem.
 
-PRÓXIMO PASSO EXATO (FASE 3 — GAPS & LEARNING ENGINE):
-Criar a tabela knowledge_states no Supabase para mapear e persistir o nível de domínio das competências avaliadas e os gaps detectados, alimentando o motor de seleção da próxima atividade adaptativa.
+PRÓXIMO PASSO TÉCNICO:
+Configurar as variáveis de ambiente na Vercel (URL/Key do Supabase e endpoint do Webhook n8n) para ligar a nova interface aos dados reais de produção.
